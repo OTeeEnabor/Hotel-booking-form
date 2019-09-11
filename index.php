@@ -1,9 +1,11 @@
 <?php
+//save this into a php file called user
 //connect to the hotelbooking  database
 $servername = 'localhost'; //using wampserver
 $username   ='adminhotel';
 $password   = 'hotelpass';
 $dbname     ='HOTELBOOKING';
+//save this into a php file called connection.php
 //create a conncetion
 $conn = new mysqli($servername,$username,$password,$dbname);
 //check if the connection was successful
@@ -28,12 +30,12 @@ if($conn->connect_error){
 <body class="form-body">
     <div class="container">
         <div class="row">
-        <div class="col-lg-6 mx-2 my-2 bg-success">
-            <div class="form-container">
-            <h1> NAV HOTEL BOOKINGS</h1>
+        <div class="col-lg-6 mx-2 my-2 bg-transparent form-col">
+            <div class="form-container body-form">
+            <h1 class="h1 text-center form-heading"> NAV HOTEL BOOKINGS</h1>
             </div>
             <!--Form Starts Here-->
-            <form role="form" method="POST"> 
+            <form role="form" method="POST" class="form-holder"> 
             <div class="form-group"> 
                 <label for="name">Name</label> 
                 <input type="text" class="form-control" id="name"  
@@ -48,27 +50,24 @@ if($conn->connect_error){
             <!--PHP CODE TO INSTERT HOTELS IN THE DATABASE-->
             <select name ="hotels"class="form-control">
             <?php
-            $hotels = "SELECT name FROM hotels";
+
+            $hotels = "SELECT name, daily_rate FROM hotels";
+
             $result = $conn->query($hotels);
 
             if($result->num_rows > 0){
                 while($row = $result->fetch_assoc()){
                     $listitem = $row['name'];
+                    $dailyrate = $row['daily_rate'];
                     echo<<<END
-                    <option> $listitem</option>
+                    <option value="$listitem"> $listitem -- <b>Daily Rate: R$dailyrate</b></option>
 END;
-                }
-                
+                }                
             } else{
                 echo "Please contact system admin";
             }
-            $conn->close();
+            // $conn->close();
             ?>
-                <!-- <option>1</option> 
-                <option>2</option> 
-                <option>3</option> 
-                <option>4</option> 
-                <option>5</option>  -->
             </select>  
             </div>
 
@@ -87,24 +86,93 @@ END;
             <!--Form ENDS Here-->
         </div>
         <div class="col-lg-4 my-2 bg-success">
+
         <?php
         if(isset($_POST['submit'])){
+            //important variables
+            //hotel selected
+            $hotelInput =   $_POST['hotels'];
+            //daily rate-- query database based on hotel selected.
+            $daily_rate_query   =   "SELECT * FROM hotels WHERE name='$hotelInput'";
+            $result2 = $conn->query($daily_rate_query);
+            //check if result was successful
+            if($result2->num_rows > 0){
+                //outputdata
+                $row2 = $result2->fetch_assoc();
+                //hotel rate
+                $hotelRate = intval($row2['daily_rate']);               
+               // echo "Hotel rate ".$hotelRate ."<br>";
+            }
+            //code block to calculate the number of days guest will stay at hotel.
+            //Check in date -STRING
+            $checkin    =   strtotime($_POST['check-in']);
+            //check out date -STRING
+            $checkout    =   strtotime($_POST['check-out']);
+            //calculate the difference between the two days
+            $hotelstay  =   ($checkout-$checkin)/(60*60*24);
+            //echo " number of days".$hotelstay." <br>";
+            //calculate the amount due;
+            $amountdue = $hotelstay *$hotelRate;
+            //echo "amount due ".$amountdue." <br>";
+            //$amount due
+            if(!isset($_POST['confirm-booking'])){
+                echo<<<END
+               
+                <h1 class="h1 text-center form-heading">CONFIRM BOOKING</h1>
+                
+                <div class="container">
+                <div class="row">
+                <div class="col-12">
+                <ul>
+                    <li>
+                    <span class="book-final">
+                    Hotel </span><span class"booking-inputs">$hotelInput</span>
+                    </li>
+                    <li>
+                    <span class="book-final">
+                    Check-In Date </span><span class"booking-inputs">$checkin</span>
+                    </li>
+                    <li>
+                    <span class="book-final">
+                    Check-Out Date </span><span class"booking-inputs">$checkout</span>
+                    </li>
+                    <li>
+                    <span class="book-final">
+                    Cost </span><span class"booking-inputs">$amountdue</span>
+                    </li>
+                </ul>
+                </div>
+                </div>
+            </div>
+                
+
+
+
+
+                <form role="form" method="POST" class="form-holder">
+                <button type="submit" class="btn btn-primary btn-lg btn-block my-2" name="confirm-booking">Confirm Booking</button>
+    
+                </form>
+END;
+
+            }
+
             echo $_POST['hotels'];
             $dateFrom = new DateTime($_POST['check-in']);
             $dateTo = new DateTime($_POST['check-out']);
-            
             $duration = date_diff($dateFrom,$dateTo,true);
-            var_dump($dateFrom) ;
-        
+            var_dump($dateFrom);
+
+            //create a new table to capture the hotel guest. 
+
+            // if name of table not there
+            // create table 
+            // else
+            // append data into table.
+
+
+
         }
-        // $subBooking = $_POST['submit'];
-        // if(isset($subBooking)){
-        //     echo $_POST['check-out'];
-        //     echo "<br>";
-        //     echo gettype($_POST['check-in']);
-
-
-        // }
         ?>
         </div>
         
@@ -115,30 +183,24 @@ END;
 </body>
 </html>
 
-<?php
-//change the data type of the date inputed in the form.so that it can be used to calculate the cost of the hotel stay.
-if(isset($_POST['submit'])){
-    echo $_POST['hotels'];
-    $dateFrom =date('Y-m-d',strtotime( $_POST['check-in']));
-    $dateTo  = date('Y-m-d',strtotime( $_POST['check-out']));
-    var_dump($dateFrom) ;
 
-}
-
-
-
-
-?>
-<?php
+<!-- <?php
 //Class declaration
 
-class Booking{
+// class Booking{
+
+
+    //constructor method
+    // function __construct($name,$hotel,$checkin,$checkout)
+    // {
+        
+    // }
 
     //class properties
 
    // public $name;$surname;$hotel;
-}
+// }
 
 
 
-?>
+?> -->
