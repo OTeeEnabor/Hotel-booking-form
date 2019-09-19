@@ -1,3 +1,4 @@
+
 /*IMPORTS FONTS */
 
 @import url('https://fonts.googleapis.com/css?family=Hepta+Slab&display=swap');
@@ -6,18 +7,57 @@
 
 
 /*IMPORT FONT END*/
+*{
+    margin:0;
+    padding:0;
+}
+.hotel-body{
+    background-color:whitesmoke;
+}
+
+/*LANDING PAGE START */
+.landing-page-body{
+    /* background-image:url(../images/landing-background.jpg); */
+    background-size:cover;
+    background-position: center;
+
+}
+.landing-page{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items:center;
+    font-family: 'Hepta Slab', serif;
+}
+.landing-link{
+
+}
+.carousel-item {
+    height: 95vh;
+    min-height: 350px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
 
 
+
+/*LANDING PAGE END*/
 
 /*Body Styling START*/
 .form-body{
+    width:100vw!important;
     background-image:url(../images/background2.jpg);
     background-repeat: no-repeat;
     background-size:cover;
+    background-position:center;
 }
 /*Body Styling END*/
 /*FORM COLUMN START */
-.form-holder{
+.form-col{
+    background-color:rgba(167, 152, 171, 0.5);
     /* background-color:grey;
     opacity: 0.5; */
 }
@@ -48,15 +88,65 @@ form label{
 }
 
 /*CONFIRMATION BOOKING START */
-.confirmation-final li{
+.confirm-container{
+    background-color:rgba(167, 152, 171, 0.5);
+}
+
+
+
+.confirmation-final ul li{
     list-style-type: none;
 }
 .confirm-booking ul li span{
     color:white;
     font-family: 'Hepta Slab', serif;
+    list-style-type: none;
 }
+/*SUCCESSFULL BOOKING */
+.success-booking{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items: center;
+}
+.success-booking img{
+    width:150px;
+    height:150px;
+}
+.success-booking p{
+    text-align:center;
+    color:white;
+}
+/*DELETE PREVIOUS FORM*/
+.prev-booking p{
+    color:white;
+    font-family: 'Hepta Slab', serif;
+    text-align:center;
+}
+.prev-booking ul li{
+    list-style-type:none;
+}
+.duplicate-buttons{
+    text-align:center;
+}
+
+/*DELETE PREVIOUS FORM END*/
 /*CONFIRMATION BOOKING END*/
 
 /*FORM CONTENT END8/
 
 /*FORM CONTAINER END */
+
+/* .hotel-display{
+    border:2px solid purple;
+    border-radius:20px;
+    height:50vh;
+    background-color:whitesmoke;
+}
+.hotel-slide{
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+
+} */
